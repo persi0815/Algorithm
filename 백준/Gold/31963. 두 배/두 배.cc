@@ -1,54 +1,52 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+
 using namespace std;
 
 /* 두배
-길이 n인 양의 정수열을 오름차순으로 만들고자 함
-수열중 하나의 원소값을 2배할 수 있음. 해당 연산을 최소 횟수로 적용해서 오름차순으로 만들어야.
-그냥 그리디 같당..
+길이 n인 양의 정수열을 오름차순으로 만들고자 함.
+수열 중 하나의 원소 값을 2배할 수 있음.
+해당 연산을 최소 횟수로 적용해서 오름차순으로 만들어야.
+값 자체가 아닌 지수를 배열에 저장해야 한다.
+원본 배열에 밑이 2인 로그를 취해서 double 타입으로 저장!!
 */
 
 int n;
-vector<int> arr(250000);
-int cnt = 0;
+vector<double> res;  // log2 값을 저장할 배열
+long long cnt = 0;
 
 double log_b(double x) {
-	return log(x) / log(2);
+    return log(x) / log(2);
 }
 
 void solution() {
-	for (int i = 1; i < n; i++) {
-		if (arr[i - 1] > arr[i]) {
-			// 로그 사용
-			double r = log_b((double)arr[i-1] / arr[i]);
-			if (fmod(r, 1.0) < 1e-9) { // r이 정수로 딱 나눠 떨어질 때
-				cnt += (int)r;
-				arr[i] = arr[i] * pow(2, (int)r);
-				//cout << r << " " << cnt << endl;
-			}
-			else {
-				cnt += ((int)r + 1);
-				arr[i] = arr[i] * pow(2, (int)r+1);
-				//cout << r << " " << cnt << endl;
+    for (int i = 1; i < n; i++) {
+        if (res[i - 1] > res[i] + 1e-9) {  // 부동소수점 오차 보정 추가
 
-			}
-			
-		}
-	}
-	cout << cnt;
+            double diff = res[i - 1] - res[i];
+            long long needed = (fmod(diff, 1.0) < 1e-9) ? (long long)diff : (long long)ceil(diff);
+
+            cnt += needed;
+            res[i] += needed;  // log2 값 증가 (실제 값 *2 효과)
+        }
+    }
+    cout << cnt << endl;
 }
 
 int main() {
-	// 입력
-	cin >> n;
-	arr.resize(n);
-	for (int i = 0; i < n; i++) {
-		cin >> arr[i];
-	}
+    cin >> n;
+    res.resize(n);  // 크기를 n으로 조정
 
+    for (int i = 0; i < n; i++) {
+        long long val;
+        cin >> val;
+        if (val <= 0) {
+            cerr << "Error: 입력값이 양수가 아닙니다." << endl;
+            return 1; // 에러 종료
+        }
+        res[i] = log_b(val);  // log2 값을 저장
+    }
 
-	// 로직
-	solution();
-
+    solution();
 }
