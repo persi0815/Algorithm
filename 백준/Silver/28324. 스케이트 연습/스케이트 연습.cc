@@ -10,8 +10,8 @@ using namespace std;
 
 int n;
 vector<int> arr(n);
-int r_sum = 0;
-int num = 1;
+long long r_sum = 0;
+int num = 1; // 높일 수 있는 max
 
 void solution() {
 	for (int i = n - 1; i >= 0; i--) {
