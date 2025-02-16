@@ -3,7 +3,7 @@
 using namespace std;
 
 int A, B, C;
-int dp[21][21][21]; // 0~20
+int dp[21][21][21] = { }; // 0~20
 
 int w(int a, int b, int c) {
 
@@ -13,7 +13,7 @@ int w(int a, int b, int c) {
 	// 20보다 큰 값은 dp[20][20][20]으로 치환
 	if (a > 20 || b > 20 || c > 20) return w(20, 20, 20);
 
-	if (dp[a][b][c] != -1) return dp[a][b][c];
+	if (dp[a][b][c] != 0) return dp[a][b][c];
 
 	else if (a < b && b < c) {
 		return dp[a][b][c] = w(a, b, c - 1) + w(a, b - 1, c - 1) - w(a, b - 1, c);
@@ -24,7 +24,7 @@ int w(int a, int b, int c) {
 }
 
 int main() {
-	memset(dp, -1, sizeof(dp)); // -1로 초기화
+	//memset(dp, -1, sizeof(dp)); // -1로 초기화
 
 	while (1) {
 		cin >> A >> B >> C;
