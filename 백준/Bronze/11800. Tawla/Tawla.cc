@@ -2,81 +2,38 @@
 #define endl '\n'
 using namespace std;
 
-/*
-
-*/
-
 int t;
 
-void print(int a, int b) {
-	if (a == 6 && b == 5) {
-		cout << "Sheesh Beesh" << endl;
-		return;
-	}
-
-	int arr[2] = { a, b };
-	for (int i = 0; i < 2; i++) {
-		if (arr[i] == 1) {
-			cout << "Yakk" << " ";
-		}
-		else if (arr[i] == 2) {
-			cout << "Doh" << " ";
-		}
-		else if (arr[i] == 3) {
-			cout << "Seh" << " ";
-		}
-		else if (arr[i] == 4) {
-			cout << "Ghar" << " ";
-		}
-		else if (arr[i] == 5) {
-			cout << "Bang" << " ";
-		}
-		else if (arr[i] == 6) {
-			cout << "Sheesh" << " ";
-		}
-	}
-	cout << endl;
-}
-
-void print_s(int a) {
-	if (a == 1) {
-		cout << "Habb Yakk" << endl;
-	}
-	else if (a == 2) {
-		cout << "Dobara" << endl;
-	}
-	else if (a == 3) {
-		cout << "Dousa" << endl;
-	}
-	else if (a == 4) {
-		cout << "Dorgy" << endl;
-	}
-	else if (a == 5) {
-		cout << "Dabash" << endl;
-	}
-	else {
-		cout << "Dosh" << endl;
-	}
-}
+// 주사위 숫자 별칭
+string names[7] = {"", "Yakk", "Doh", "Seh", "Ghar", "Bang", "Sheesh"};
+// 같은 숫자가 나왔을 때의 별칭
+string sameNames[7] = {"", "Habb Yakk", "Dobara", "Dousa", "Dorgy", "Dabash", "Dosh"};
 
 int main() {
-	cin >> t;
-	for (int i = 0; i < t; i++) {
-		int a, b;
-		cin >> a >> b;
-		cout << "Case " << i+1 << ": ";
+    cin >> t;
+    for (int i = 1; i <= t; i++) {
+        int a, b;
+        cin >> a >> b;
+        cout << "Case " << i << ": ";
 
-		if(a > b) {
-			print(a, b);
-		}
-		else if (a == b) {
-			print_s(a);
-		}
-		else if(a < b){
-			print(b, a);
-		}
-		
-	}
+        // 예외 처리: "Sheesh Beesh"
+        if ((a == 6 && b == 5) || (a == 5 && b == 6)) {
+            cout << "Sheesh Beesh" << endl;
+            continue;
+        }
 
+        // 두 숫자가 같은 경우 -> 특정 이름 출력
+        if (a == b) {
+            cout << sameNames[a] << endl;
+            continue;
+        }
 
+        // 항상 큰 숫자가 먼저 오도록 정렬
+        if (a < b) swap(a, b);
+
+        // 일반적인 경우
+        cout << names[a] << " " << names[b] << endl;
+    }
+
+    return 0;
 }
