@@ -1,21 +1,11 @@
 #include <iostream>
 #include <queue>
 #include <tuple>
-#include <unordered_set>
 #include <algorithm>
 
 using namespace std;
+bool visited[500][500][500] = {false};
 
-/* tuple을 unordered_set에서 사용하기 위한 해시 함수 */
-struct tuple_hash {
-    size_t operator()(const tuple<int, int, int>& t) const {
-        return (size_t(get<0>(t)) * 31 * 31 + size_t(get<1>(t)) * 31 + size_t(get<2>(t)));
-    }
-};
-
-unordered_set<tuple<int, int, int>, tuple_hash> s;
-
-/* 항상 {최소, 중간, 최대} 형태로 변환 */
 tuple<int, int, int> normalize(int a, int b, int c) {
     int x = min({a, b, c});
     int z = max({a, b, c});
@@ -27,12 +17,13 @@ void solution(int a, int b, int c) {
     queue<tuple<int, int, int>> q;
     
     tuple<int, int, int> start = normalize(a, b, c);
-    s.insert(start);
     q.push(start);
+    visited[get<0>(start)][get<1>(start)][get<2>(start)] = true;
     
     while (!q.empty()) {
         auto tup = q.front();
         a = get<0>(tup); b = get<1>(tup); c = get<2>(tup);
+        visited[a][b][c] = true;
         q.pop();
 
         if (a == b && b == c) {
@@ -48,10 +39,11 @@ void solution(int a, int b, int c) {
         };
 
         for (const auto& state : next_states) {
-            if (s.find(state) == s.end()) {
-                s.insert(state);
+            if(!visited[get<0>(state)][get<1>(state)][get<2>(state)]){
                 q.push(state);
+                
             }
+            
         }
     }
 
