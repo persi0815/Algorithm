@@ -40,12 +40,12 @@ int bfs(string str, int cnt){
         
         for(int st = 0; st <= n-k; st++){ // 점차 뒤로
             string n_str = str;
-            for(int i = 0; i < k/2; i++){ // 뒤집기 전과
-                char c = n_str[st + i];
-                n_str[st +i] = n_str[st +k-i-1]; 
-                n_str[st +k-i-1] = c;
-            }
-            // reverse(n_str.begin() + st, n_str.begin() + st + k);
+            //for(int i = 0; i < k/2; i++){ // 뒤집기 전과
+            //    char c = n_str[st + i];
+            //    n_str[st +i] = n_str[st +k-i-1]; 
+            //    n_str[st +k-i-1] = c;
+            //}
+            reverse(n_str.begin() + st, n_str.begin() + st + k);
             
             if(visited.find(stoi(n_str)) == visited.end()){
                 visited.insert(stoi(n_str));
