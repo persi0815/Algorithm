@@ -4,7 +4,7 @@
 #include <algorithm>
 
 using namespace std;
-bool visited[500][500][500] = {false};
+bool visited[500][500] = {false};
 
 tuple<int, int, int> normalize(int a, int b, int c) {
     int x = min({a, b, c});
@@ -18,12 +18,12 @@ void solution(int a, int b, int c) {
     
     tuple<int, int, int> start = normalize(a, b, c);
     q.push(start);
-    visited[get<0>(start)][get<1>(start)][get<2>(start)] = true;
+    visited[get<0>(start)][get<1>(start)] = true;
     
     while (!q.empty()) {
         auto tup = q.front();
         a = get<0>(tup); b = get<1>(tup); c = get<2>(tup);
-        visited[a][b][c] = true;
+        visited[a][b] = true;
         q.pop();
 
         if (a == b && b == c) {
@@ -39,7 +39,7 @@ void solution(int a, int b, int c) {
         };
 
         for (const auto& state : next_states) {
-            if(!visited[get<0>(state)][get<1>(state)][get<2>(state)]){
+            if(!visited[get<0>(state)][get<1>(state)]){
                 q.push(state);
                 
             }
