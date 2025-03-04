@@ -13,14 +13,14 @@ int main() {
     fill(arr, arr + 1000001, true);
     arr[0] = arr[1] = false;
     
-    for(int i = 2; i <= sqrt(n); i++){
+    for(long long i = 2; i <= n; i++){
         for(long long j = i*i; j <= n; j += i){
             if(arr[j] == true) arr[j] = false;
         }
     }
     
     for(int i = m; i <= n; i++){
-        if(arr[i]) cout << i << endl;
+        if(arr[i]) cout << i << '\n';
     }
     
 }
