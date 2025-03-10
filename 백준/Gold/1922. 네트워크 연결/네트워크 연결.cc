@@ -4,13 +4,6 @@
 
 using namespace std;
 
-struct Edge {
-    int weight, u, v;
-    bool operator<(const Edge& other) const { // 여기선없어도 되는데,  sort()로 정렬시 weight로 오름차순이 되도록 한다. 
-        return weight < other.weight;
-    }
-};
-
 vector<int> parent;
 
 // Find 연산 (경로 압축 적용)
@@ -20,7 +13,7 @@ int find(int a) {
     return parent[a] = find(parent[a]);  // 경로 압축
 }
 
-// Union 연산 (작은 루트 노드 기준으로 합침)
+// Union 연산 (작은 루트 기준으로 합치기)
 void union_sets(int a, int b) {
     a = find(a);
     b = find(b);
@@ -39,7 +32,7 @@ int main() {
     int n, m;
     cin >> n >> m;
 
-    vector<Edge> edges;
+    vector<pair<int, pair<int, int>>> edges;  // {가중치, {정점1, 정점2}}
     parent.resize(n + 1);
 
     // 부모 배열 초기화 (자기 자신을 부모로 설정)
@@ -51,7 +44,7 @@ int main() {
     for (int i = 0; i < m; i++) {
         int a, b, c;
         cin >> a >> b >> c;
-        edges.push_back({c, a, b});
+        edges.push_back({c, {a, b}});  // {가중치, {a, b}} 형식으로 저장
     }
 
     // 간선 가중치 기준 정렬 (오름차순)
@@ -59,9 +52,13 @@ int main() {
 
     int mst_weight = 0;
     for (auto& edge : edges) {
-        if (find(edge.u) != find(edge.v)) {  // 루트가 다르면 연결
-            union_sets(edge.u, edge.v);
-            mst_weight += edge.weight;
+        int weight = edge.first;
+        int a = edge.second.first;
+        int b = edge.second.second;
+
+        if (find(a) != find(b)) {  // 사이클이 생기지 않는다면 연결
+            union_sets(a, b);
+            mst_weight += weight;
         }
     }
 
