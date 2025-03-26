@@ -31,13 +31,13 @@ int main(){
         idx += 2;
     }
 
-    // 1은 더함
-    while(idx < v.size() && v[idx] == 1){
-        res += 1;
+    // 1 이상 양수는 더함
+    while(idx < v.size() && v[idx] >= 1){
+        res += v[idx];
         idx++;
     }
 
-    // 나머지 숫자들
+    // 나머지 숫자들 (0 이하)
     vector<int> sub(v.begin() + idx, v.end());
 
     vector<int> negatives;
@@ -46,12 +46,12 @@ int main(){
     for (int num : sub) {
         if (num == 0) hasZero = true;
         else if (num < 0) negatives.push_back(num);
-        else res += num; // 남은 양수는 그냥 더함 (ex: 홀수 개의 양수 중 마지막 하나)
     }
 
     sort(negatives.begin(), negatives.end()); // 작은 음수부터
 
     int i = 0;
+    // 가장 작은 음수끼리 곱함
     while (i + 1 < negatives.size()) {
         res += negatives[i] * negatives[i + 1];
         i += 2;
