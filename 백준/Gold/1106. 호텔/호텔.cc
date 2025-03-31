@@ -17,21 +17,16 @@ int main() {
     vector<int> dp(C + 101, INT_MAX); // 여유 공간을 좀 줘야 함
     dp[0] = 0;
 
-    for (int i = 0; i <= C; ++i) {
-        if (dp[i] == INT_MAX) continue;
-        for (auto& city : cities) { // 도시 순서는 상관 없음
-            int next_customer = i + city.second;
-            int next_cost = dp[i] + city.first;
-            if (dp[next_customer] > next_cost) {
-                dp[next_customer] = next_cost;
+        // 중복 조합 방식: 도시 하나 고정 → 가능한 고객 수 누적
+    for (auto& city : cities) {
+        for (int i = city.second; i <= C + 100; ++i) {
+            if (dp[i - city.second] != INT_MAX) {
+                dp[i] = min(dp[i], dp[i - city.second] + city.first);
             }
         }
     }
 
-    int result = INT_MAX;
-    for (int i = C; i <= C + 100; ++i) {
-        result = min(result, dp[i]);
-    }
+    int result = *min_element(dp.begin() + C, dp.begin() + C + 101);
 
     cout << result << endl;
     return 0;
