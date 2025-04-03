@@ -15,6 +15,8 @@ using namespace std;
 
 일단, 최대한 자릿수가 높아야 함. 그 다음, 숫자 크기가 커야 함. 
 각 숫자를 만들기 위한 최소 비용 구하기..? 
+
+예외 왜이리 많냐..
 */
 
 int n, m;
@@ -45,7 +47,7 @@ int main(){
 
     int left_p = m % cheap_p;
     int now = n-1;
-    // 나머지가 없었는데, 0으로만 사는 경우..!
+    // 나머지가 0이 아니라도 지금까지 산게 모두 0이었다면, 어떻게든 최대한 다른 수를 구매해야 함
     int flag = 0;
     if(cheap == 0){
         flag = -1;
@@ -60,21 +62,13 @@ int main(){
             }
         }
     }
-
-    // for(int p : purchase){
-    //     cout << p << " ";
-    // }
-    // cout << endl;
     
     // 그 다음에 돈이 남으면 숫자 크고 비싼거랑 바꿔치기 해. 
     // 큰 수부터? 어짜피 큰게 최대한 많아야 좋은 것..! 
     // 수가 적더라도 최대한 높은 자릿수에 큰 숫자가 들어가면 좋음
-    
     while(flag != -1 && left_p >= 0 && cheap < now){ // 새로 사는게 더 커야 해
         if(num[now] <= left_p + cheap_p && purchase[cheap] > 0){ // 기존꺼 버리고 새거 살 수 있어
-            //cout << "lef1 " << now << " " << left_p << " " << cheap_p << " " << num[now] << endl; 
             left_p = left_p + cheap_p - num[now]; 
-            //cout << "lef2 " << now << " " << left_p << endl;
             purchase[cheap]--;
             purchase[now]++;
         }
@@ -84,18 +78,10 @@ int main(){
         }
     }
     
-
-    // for(int p : purchase){
-    //     cout << p << " ";
-    // }
-    // cout << endl;
-
-    // 큰수부터 사용해서 수 만들어
+    // 큰수부터 사용해서 수 만들어 - 수 커질 수 있으니까 string 사용!!
     for(int i = n-1; i >= 0; i--){
         while(purchase[i]--){
-            //cout << i << endl;
             result_num += to_string(i);
-            //cout << result_num << endl;
         }
     }
     if(result_num == "") result_num = "0";
