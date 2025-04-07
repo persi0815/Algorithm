@@ -41,6 +41,7 @@ int main(){
         for(int i = 0; i < 4; i++){
             int n_y = c_y + dyx[i].first; 
             int n_x = c_x + dyx[i].second; 
+            // 영역 벗어난 것도 바다임!!
             if(n_y < 0 || n_y >= r || n_x < 0 || n_x >= c || v[n_y][n_x] == '.') cnt++;
             if(cnt >= 3) {
                 xx.second = true;
@@ -61,7 +62,6 @@ int main(){
             v[xx.first.first][xx.first.second] = '.';
         }
     }
-    //cout << up << " " << down << " " << left << " " << right << endl;
     
     
     // 지도 출력. 가장 작은 직사각형
