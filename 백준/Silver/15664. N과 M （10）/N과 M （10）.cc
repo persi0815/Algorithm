@@ -14,7 +14,6 @@ using namespace std;
 */
 
 int n, m; 
-int bef = -1;
 void make(vector<int>& v, vector<int>& res, int st){
     if(res.size() == m){ // 원하는 원소만큼 고름
         for(int i = 0; i < m; i++){
@@ -23,14 +22,13 @@ void make(vector<int>& v, vector<int>& res, int st){
         cout << '\n'; 
         return;
     }
-    
+
+    int bef = -1;
     for(int i = st; i < v.size(); i++){ // 수 중복 가능
-        if(bef == v[i]) continue;
+        if(bef == v[i]) continue; // 이전의 것과 중복 안되도록!!
         res.push_back(v[i]);
-        // for(int r:res) cout << r << " ";
-        // cout << endl;
         make(v, res, i+1);
-        bef = res.back();
+        bef = res.back(); // 같은 깊이에서 중복되는 숫자 제거
         res.pop_back(); 
         
     }
@@ -39,18 +37,10 @@ void make(vector<int>& v, vector<int>& res, int st){
 int main(){
     cin >> n >> m; 
     vector<int> v;
-    //unordered_set<int> s; 
     for(int i = 0; i < n; i++){
         int num; cin >> num;
         v.push_back(num);
-        // if(s.find(num) == s.end()) { // 중복 안되도록
-        //       
-        //     s.insert(num); 
-        // }
     }
-
-    //for(int vv:v) cout << vv << " ";
-    //cout << endl;
     
     sort(v.begin(), v.end()); // 오름차순
     vector<int> res;
