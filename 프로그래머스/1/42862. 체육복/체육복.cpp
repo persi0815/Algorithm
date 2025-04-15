@@ -35,19 +35,23 @@ int solution(int n, vector<int> lost, vector<int> reserve) {
     // 체육복 받기
     int idxx = 0;
     for(int l : n_lost){ // 학생 번호
-        while(idxx < n_reserve.size() && n_reserve[idxx] < l-1) { // 줄 수 있는 친구가 너무 작아
+        
+        // 줄 수 있는 친구가 너무 작아 -> 키우기
+        while(idxx < n_reserve.size() && n_reserve[idxx] < l-1) { 
             idxx++; // 줄 수 있을때까지 이동
         }
-        if(idxx >= n_reserve.size()) break;
+        
+        // 인덱스 범위 확인
+        if(idxx >= n_reserve.size() || n_reserve.size() == 0) break;
+        
         // 빌려줄 수 있음
         if(l == n_reserve[idxx] - 1 
            || l == n_reserve[idxx] 
            || l == n_reserve[idxx] + 1){
             get++; // 수령
-            idxx++; 
+            idxx++; // 다음 여분을 가진 친구로
         }
     }
-    
 
     answer = n - (n_lost.size() - get);
     return answer;
