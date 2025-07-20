@@ -1,6 +1,9 @@
 import java.util.*;
-
-class Node implements Comparable<Node> {
+/*
+프림 알고리즘으로 가중치가 낮은 것부터 선택해 나감
+-> 모든 섬을 최소 비용으로 연결하는 MST 구하기!!
+*/
+class Node { //  implements Comparable<Node>
     int to, cost;
 
     Node(int to, int cost) {
@@ -8,16 +11,16 @@ class Node implements Comparable<Node> {
         this.cost = cost;
     }
 
-    @Override
-    public int compareTo(Node o) {
-        return Integer.compare(this.cost, o.cost);
-    }
+    // @Override
+    // public int compareTo(Node o) {
+    //     return Integer.compare(this.cost, o.cost);
+    // }
 }
 
 class Solution {
     public int prim(int n, List<Node>[] graph) {
         boolean[] visited = new boolean[n];
-        PriorityQueue<Node> pq = new PriorityQueue<>();
+        PriorityQueue<Node> pq = new PriorityQueue<>((n1, n2) -> Integer.compare(n1.cost, n2.cost));
         pq.offer(new Node(0, 0)); // 시작 노드
         int totalCost = 0;
 
