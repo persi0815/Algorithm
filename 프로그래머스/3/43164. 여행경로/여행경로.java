@@ -7,21 +7,20 @@ import java.util.*;
 
 class Solution {
     
-    List<String> answer = new ArrayList<>();
     boolean[] visited;
     List<String> path = new ArrayList<>();
 
-    public String[] solution(String[][] tickets) {
+    public List<String> solution(String[][] tickets) { // String[]
         Arrays.sort(tickets, (a, b) -> a[0].equals(b[0]) ? a[1].compareTo(b[1]) : a[0].compareTo(b[0]));
         visited = new boolean[tickets.length];
         path.add("ICN");
         dfs("ICN", tickets, 0);
-        return answer.toArray(new String[0]);
+        return path;
+        //return answer.toArray(new String[0]); // Object[]를 String[]로 바꿔줘야 함. 
     }
     
     public boolean dfs(String curr, String[][] tickets, int used) {
         if (used == tickets.length) {
-            answer = new ArrayList<>(path);
             return true; // 사전순 가장 빠른 경로를 찾으면 바로 종료
         }
 
