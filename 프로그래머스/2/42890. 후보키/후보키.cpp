@@ -11,9 +11,9 @@ bool isUnique(int mask, const vector<vector<string>>& relation) {
     int rowSize = relation.size();
     int colSize = relation[0].size();
 
-    for (int r = 0; r < rowSize; r++) {
+    for (int r = 0; r < rowSize; r++) { // 20
         string temp = "";
-        for (int c = 0; c < colSize; c++) {
+        for (int c = 0; c < colSize; c++) { // 8
             if (mask & (1 << c)) { // 해당 컬럼이 비트에 포함되어 있다면
                 temp += relation[r][c] + "|";
             }
@@ -29,7 +29,7 @@ int solution(vector<vector<string>> relation) {
     vector<int> candidateKeys;
 
     // 모든 조합을 비트마스크로 표현 (1부터 2^colSize - 1까지)
-    for (int mask = 1; mask < (1 << colSize); mask++) {
+    for (int mask = 1; mask < (1 << colSize); mask++) { 
         
         // 1. 유일성 체크
         if (!isUnique(mask, relation)) continue;
