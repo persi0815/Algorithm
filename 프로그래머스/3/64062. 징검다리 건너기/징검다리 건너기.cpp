@@ -13,7 +13,7 @@ int solution(vector<int> stones, int k) {
         int mid = (start+end)/2; 
         int jump = 0;
         bool avail = true;
-        for(int i = 0; i < stones.size(); i++){ // 200000
+        for(int i = 0; i < stones.size(); i++){ // 200,000
             if(stones[i] - mid < 0){
                 jump++;
                 if(jump >= k) {
