@@ -41,7 +41,7 @@ vector<int> solution(vector<int> fees, vector<string> records) {
         
         int carNum = stoi(car);
         int curTime = timeToMin(time);
-        // in 넣고, out시 가격 계산해서 넣기
+        // in 넣고, out시 시간 계산해서 넣기
         if(order == "IN"){ 
             car_in[carNum] = curTime;
         }else{
