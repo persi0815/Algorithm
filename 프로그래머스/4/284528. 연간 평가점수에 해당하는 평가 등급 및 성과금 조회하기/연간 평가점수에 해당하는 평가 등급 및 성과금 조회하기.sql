@@ -1,0 +1,28 @@
+-- 사원별 성과금 정보를 조회
+
+-- 점수 계산 -> 점수에 따라 평가 등급과 성과급 % 설정 -> 연봉 기준 BOUNDS 계산
+
+WITH EMP_GRADE AS(
+    SELECT E.EMP_NO, E.EMP_NAME, E.SAL,
+    CASE 
+        WHEN SUM(G.SCORE)/2 < 80 THEN 'C'
+        WHEN SUM(G.SCORE)/2 >= 80 AND SUM(G.SCORE)/2 < 90 THEN 'B'
+        WHEN SUM(G.SCORE)/2 >= 90 AND SUM(G.SCORE)/2 < 96 THEN 'A'
+        WHEN SUM(G.SCORE)/2 >= 96 THEN 'S'
+    END AS GRADE
+    FROM HR_EMPLOYEES E NATURAL JOIN HR_GRADE G
+    GROUP BY E.EMP_NO
+)
+
+SELECT 
+    E.EMP_NO, 
+    E.EMP_NAME, 
+    E.GRADE, 
+    CASE
+        WHEN E.GRADE = 'S' THEN E.SAL*20/100
+        WHEN E.GRADE = 'A' THEN E.SAL*15/100
+        WHEN E.GRADE = 'B' THEN E.SAL*10/100
+        WHEN E.GRADE = 'C' THEN 0
+    END AS BONUS
+FROM EMP_GRADE E
+ORDER BY E.EMP_NO ASC
