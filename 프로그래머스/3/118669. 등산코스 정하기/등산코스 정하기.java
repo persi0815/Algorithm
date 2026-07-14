@@ -1,110 +1,81 @@
-import java.util.*;
+import java.util.*; 
 
-class Corse{
-    int summit; int intensity; 
-    Corse(int summit, int intensity){
-        this.summit = summit; 
-        this.intensity = intensity; 
-    }
-}
-class Path{
-    int next; int intensity;
-    Path(int next, int intensity){
-        this.next = next; 
-        this.intensity = intensity;
-    }
-}
 class Node{
-    int to; int cost; 
-    Node(int to, int cost){
-        this.to = to; 
-        this.cost = cost;
+    int num; int cost; 
+    public Node(int num, int cost){
+        this.num = num; 
+        this.cost = cost; 
     }
 }
+
 class Solution {
-    int INT_MAX = Integer.MAX_VALUE; 
-    Set<Integer> summit_set = new HashSet<>(); // 산봉우리 유무 판단 시 사용
-    Set<Integer> gate_set = new HashSet<>(); // 출발지 유무 판단 시 사용
-    List<Corse> corses = new ArrayList<>(); // 가능한 경로들
-    int[] min_intensity;
-    
-    public void findPath(List<Node>[] graph, int[] gates){
-        PriorityQueue<Path> q = new PriorityQueue<>((a, b) -> { // 어짜피 짧은 것만 살아남으니
-            return a.intensity - b.intensity;
-        }); 
-        Arrays.fill(min_intensity, INT_MAX);
-        
-        for(int g : gates){ // 초기값
-            q.offer(new Path(g, 0));
-            min_intensity[g] = 0;
-        }
-        
-        while(!q.isEmpty()){
-            Path path = q.poll();
-            int next = path.next; int intensity = path.intensity;
-            if(min_intensity[next] < intensity) continue; // 더 작은게 나왔었다면 pass
-            
-            for(Node n : graph[next]){
-                // 출발지점인지 확인
-                if(gate_set.contains(n.to)) continue; 
-                // 해당 지점까지의 min_intensity보다 크면 컨티뉴
-                if(min_intensity[n.to] <= Math.max(intensity, n.cost)) continue; 
-                
-                min_intensity[n.to] = Math.max(intensity, n.cost);
-                // 산봉우린지 확인
-                if(summit_set.contains(n.to)){
-                    // corses.add(new Corse(n.to, Math.max(intensity, n.cost)));
-                    continue;
-                }
-                q.offer(new Path(n.to, Math.max(intensity, n.cost)));
-            }
-        }
-        
-    }
     
     public int[] solution(int n, int[][] paths, int[] gates, int[] summits) {
-        // 유무 확인에 사용할 set 만들기
-        for(int s : summits){
-            summit_set.add(s);
-        }
-        for(int g : gates){
-            gate_set.add(g);
-        }
-        min_intensity = new int[n+1];
+        // 각 지점까지의 최소 intensity
+        int[] min_intensity = new int[n+1]; 
+        Arrays.fill(min_intensity, Integer.MAX_VALUE); 
         
-        // 연결리스트
-        List<Node>[] graph = new ArrayList[n+1];
-        for(int i = 0; i <= n; i++){
-            graph[i] = new ArrayList<>(); 
-        }
+        // set 만들기
+        HashSet<Integer> gateSet = new HashSet<>(); 
+        for(int g : gates)  gateSet.add(g); 
+        HashSet<Integer> summitSet = new HashSet<>(); 
+        for(int s : summits) summitSet.add(s); 
+        
+        // 연결리스트 만들기 -  next, cost
+        List<Node>[] graph = new ArrayList[n+1]; 
+        for(int i = 0; i < n+1; i++) graph[i] = new ArrayList<>(); 
         for(int[] p : paths){
-            int i = p[0]; int j = p[1]; int w = p[2];
+            int i = p[0]; int j = p[1]; int w = p[2]; 
             graph[i].add(new Node(j, w)); 
-            graph[j].add(new Node(i, w)); 
+            graph[j].add(new Node(i, w)); // 양방향
         }
-        
-        // 출발지에서 산봉우리까지의 path를 구해야 함
-        findPath(graph, gates);
-        
-        
-        // intensity가 가장 작은 경로 구하기. 여러 개면 선봉우리 번호가 가장 낮은 코스
-        int res_summit = INT_MAX; int res_intensity = INT_MAX;
-        for(int i = 1; i <= n; i++){
-            if(summit_set.contains(i)) {
-                if(res_intensity > min_intensity[i]){
-                    res_summit = i; res_intensity = min_intensity[i];
-                }else if(res_intensity == min_intensity[i] && res_summit > i){
-                    res_summit = i; res_intensity = min_intensity[i];
+            
+        // 다익스트라로 각 지점까지의 최소 intensity 구하기
+        PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> {
+            return a.cost - b.cost; // 오름차순
+        }); 
+        for(int g : gates) {
+            pq.offer(new Node(g, 0)); 
+            min_intensity[g] = 0; 
+        }
+        while(!pq.isEmpty()){
+            Node cur = pq.peek(); pq.poll(); 
+            
+            // 고려할 필요 없다고 판단되면 제거!!
+            if(cur.cost > min_intensity[cur.num]) continue;
+            
+            for(Node nxt : graph[cur.num]){
+                // 출발지점이라면 continue
+                if(gateSet.contains(nxt.num)) continue;
+                
+                // 이미 nxt의 min_intensity가 더 작은 경우 continue
+                int new_intensity = Math.max(cur.cost, nxt.cost);
+                if(min_intensity[nxt.num] <= new_intensity) continue; 
+                
+                // 갱신(쉼터, 산봉오리)
+                min_intensity[nxt.num] = new_intensity; 
+                
+                // 쉼터라면 pq 넣기
+                if(!summitSet.contains(nxt.num)){
+                    pq.offer(new Node(nxt.num, new_intensity)); 
                 }
             }
+            
         }
-        // corses.sort((a, b) -> {
-        //     if(a.intensity != b.intensity) return a.intensity - b.intensity; 
-        //     else return a.summit - b.summit;
-        // });
+         
+        // 산봉오리들 중에서 최소 intensity 가진 산들 중 산봉우리의 번호가 가장 작은거 구하기
+        int[][] res = new int[summits.length][2];
+        for(int s = 0; s < summits.length; s++){
+            int v = summits[s]; 
+            res[s][0] = v; 
+            res[s][1] = min_intensity[v];
+        }
+        // 정렬
+        Arrays.sort(res, (a, b)-> {
+            if(a[1] != b[1]) return a[1] - b[1]; 
+            else return a[0] - b[0]; 
+        }); 
         
-        // return new int[]{corses.get(0).summit, corses.get(0).intensity};
-        return new int[]{res_summit, res_intensity};
-        // intensity가 최소가 되는 등산코스에 포함된 산봉우리 번호, intensity의 최솟값
+        return new int[]{res[0][0], res[0][1]}; // [산봉우리의 번호, intensity의 최솟값]
     }
 }
