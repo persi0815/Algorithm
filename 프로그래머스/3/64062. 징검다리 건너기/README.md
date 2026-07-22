@@ -1,10 +1,10 @@
 # [level 3] 징검다리 건너기 - 64062 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/64062) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/64062?language=java) 
 
 ### 성능 요약
 
-메모리: 10.3 MB, 시간: 5.13 ms
+메모리: 67.5 MB, 시간: 22.36 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2026년 02월 13일 19:18:12
+2026년 07월 22일 17:29:57
 
 ### 문제 설명
 
@@ -68,19 +68,19 @@
 <p><strong>입출력 예 #1</strong></p>
 
 <p>첫 번째 친구는 다음과 같이 징검다리를 건널 수 있습니다.<br>
-<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/4560e242-cf83-4e77-a14c-174f3831499d/step_stones_104.png" title="" alt="step_stones_104.png"></p>
+<img src="https://asset.programmers.co.kr/files/production/4560e242-cf83-4e77-a14c-174f3831499d/step_stones_104.png" title="" alt="step_stones_104.png"></p>
 
 <p>첫 번째 친구가 징검다리를 건넌 후 디딤돌에 적힌 숫자는 아래 그림과 같습니다.<br>
 두 번째 친구도 아래 그림과 같이 징검다리를 건널 수 있습니다.<br>
-<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/d64f29ac-3e35-4fd3-91fa-4d70e3b6c80a/step_stones_101.png" title="" alt="step_stones_101.png"></p>
+<img src="https://asset.programmers.co.kr/files/production/d64f29ac-3e35-4fd3-91fa-4d70e3b6c80a/step_stones_101.png" title="" alt="step_stones_101.png"></p>
 
 <p>두 번째 친구가 징검다리를 건넌 후 디딤돌에 적힌 숫자는 아래 그림과 같습니다.<br>
 세 번째 친구도 아래 그림과 같이 징검다리를 건널 수 있습니다.<br>
-<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/369bc8a1-7017-4135-a499-505247ab9cfc/step_stones_102.png" title="" alt="step_stones_102.png"></p>
+<img src="https://asset.programmers.co.kr/files/production/369bc8a1-7017-4135-a499-505247ab9cfc/step_stones_102.png" title="" alt="step_stones_102.png"></p>
 
 <p>세 번째 친구가 징검다리를 건넌 후 디딤돌에 적힌 숫자는 아래 그림과 같습니다. <br>
 네 번째 친구가 징검다리를 건너려면, 세 번째 디딤돌에서 일곱 번째 디딤돌로 네 칸을 건너뛰어야 합니다. 하지만 k = 3 이므로 건너뛸 수 없습니다.<br>
-<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/e44e0a83-e637-48ad-858c-4c135c3b078f/step_stones_103.png" title="" alt="step_stones_103.png"></p>
+<img src="https://asset.programmers.co.kr/files/production/e44e0a83-e637-48ad-858c-4c135c3b078f/step_stones_103.png" title="" alt="step_stones_103.png"></p>
 
 <p>따라서 최대 3명이 디딤돌을 모두 건널 수 있습니다.</p>
 
