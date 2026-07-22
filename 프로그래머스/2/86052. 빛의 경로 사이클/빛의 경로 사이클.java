@@ -1,71 +1,61 @@
-import java.util.*; 
+import java.util.*;
 
-class Node{
-    int y; int x; int dir; int cost; 
-    Node(int y, int x, int dir, int cost){
-        this.y = y; 
-        this.x = x; 
-        this.dir = dir; 
-        this.cost = cost;
-    }
-}
 class Solution {
-    // 선언
     int n, m;
-    char[][] direction;
-    int[][][] area;
-    int[][] dyx = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}}; // RDLU
+    int[][] dyx = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}}; 
+    Character[][] area;
+    boolean[][][] visited; // 나가는거에 집중
+    List<Integer> cycleLength;
     
-    int bfs(int i, int j, int d, int num) {
-        int y = i, x = j, dir = d;
-        int cost = 0;
-
-        while (true) {
-            // 방문 표시 및 거리 증가
-            area[y][x][dir] = num;
-            cost++;
-
-            // 현재 칸의 문자에 따라 '다음 나갈 방향' 결정
-            char direc = direction[y][x];
-            if (direc == 'L') dir = (dir + 3) % 4;
-            else if (direc == 'R') dir = (dir + 1) % 4;
-
-            // 결정된 방향으로 한 칸 이동 및 워프 적용
-            y = (y + dyx[dir][0] + n) % n;
-            x = (x + dyx[dir][1] + m) % m;
-
-            // 시작점과 시작 방향으로 완전히 돌아왔다면 종료
-            if (y == i && x == j && dir == d) return cost;
+    public void findCycleLen(int y, int x, int d){ // d: 들어오는 방향
+        int len = 0; 
+        // 이미 왔던 길이면 길이 확인 후 삽입
+        while(!visited[y][x][d]) {
+            // 현재 칸 처리
+            visited[y][x][d] = true; 
+            // 이번 방향
+            char order = area[y][x];
+            if (order == 'L') d = (d + 3) % 4;
+            else if (order == 'R') d = (d + 1) % 4;
+            // 이번 방향 -> 다음 칸
+            y = (y + dyx[d][0] + n)%n; 
+            x = (x + dyx[d][1] + m)%m;         
+            // 다음칸으로 이동
+            len++;
         }
+        cycleLength.add(len);
     }
     
     public int[] solution(String[] grid) {
-        List<Integer> answer = new ArrayList<>(); 
-        n = grid.length; 
-        m = grid[0].length(); 
+        cycleLength = new ArrayList<>(); 
         
-        area = new int[n][m][4]; // 행 열 들어오는 방향
-        direction = new char[n][m]; // 방향
+        n = grid.length; 
+        m = grid[0].length();
+        
+        // 배열 만들어 넣기
+        area = new Character[n][m]; 
         for(int i = 0; i < n; i++){
             for(int j = 0; j < m; j++){
-                direction[i][j] = grid[i].charAt(j);
+                area[i][j] = grid[i].charAt(j);
             }
         }
         
-        // 출발지 선택해서 경로 표시
-        int curr_num = 1; 
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < m; j++){
-                for(int d = 0; d < 4; d++){
-                    if(area[i][j][d] != 0) continue; // 이미 지나갔던 길이니 표시x
-                    answer.add(bfs(i, j, d, curr_num++));
+        visited = new boolean[n][m][4];
+        // 경로 찾기
+        for (int y = 0; y < n; y++) {
+            for (int x = 0; x < m; x++) {
+                for (int d = 0; d < 4; d++) {
+                    if (!visited[y][x][d]) {
+                        findCycleLen(y, x, d);
+                    }
                 }
             }
         }
         
-        
-        // 빛의 경로 사이클의 모든 길이들을 배열에 담아 오름차순으로 정렬
-        answer.sort((a, b) -> a-b);
-        return answer.stream().mapToInt(i->i).toArray();
+        // 주어진 격자를 통해 만들어지는 빛의 경로 사이클의 모든 길이. 오름차순으로 정렬
+        cycleLength.sort((a,b) -> {
+            return a - b;
+        });
+        return cycleLength.stream().mapToInt(i->i).toArray();
     }
 }
