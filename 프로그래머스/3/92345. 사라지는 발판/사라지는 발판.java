@@ -22,14 +22,13 @@ class Solution {
         int ay = aloc[0]; int ax = aloc[1]; int by = bloc[0]; int bx = bloc[1]; 
         
         // {현재 player 승or패, 종료까지 남은 횟수} = dfs(남아있는 발판, 내 위치, 상대 위치);    
-        Result res = dfs(board, new Loc(ay, ax), new Loc(by, bx));
-        
+        Result res = getResult(board, new Loc(ay, ax), new Loc(by, bx));
         
         // 양 플레이어가 최적의 플레이를 했을 때, 두 캐릭터가 움직인 횟수의 합을 return
         return res.leftByEnd;
     }
     
-    public Result dfs(int[][] board, Loc me, Loc other){ // 내 차례
+    public Result getResult(int[][] board, Loc me, Loc other){ // 내 차례
         
         if(board[me.y][me.x] == 0) return new Result(false, 0); // 밟고 있던 칸이 사라짐
         
@@ -48,7 +47,7 @@ class Solution {
             moveAvail = true; // 이동 가능
                 
             //{현재 player 승or패, 종료까지 남은 횟수} = dfs(남아있는 발판, 상대 위치, nxt); 
-            Result res = dfs(board, other, new Loc(ny, nx)); 
+            Result res = getResult(board, other, new Loc(ny, nx)); 
                 
             if(!res.win){ // 상대 패 -> 이길 수 있는 최소 횟수 갱신
                 canWin = true;
@@ -58,7 +57,7 @@ class Solution {
                 maxLose = Math.max(maxLose, res.leftByEnd);
             } 
         }
-        board[me.y][me.x] = 1; // 나의 현재 발판 복구
+        board[me.y][me.x] = 1; // 나의 현재 발판 복구(리턴 전 원복)
             
         if(!moveAvail) return new Result(false, 0); // 이동할 칸이 없음
             
