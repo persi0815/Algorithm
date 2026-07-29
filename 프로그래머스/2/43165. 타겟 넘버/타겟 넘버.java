@@ -1,32 +1,24 @@
-import java.util.*;
+import java.util.*; 
 
 class Solution {
-    int answer = 0; // 개수
-    
-    public void find(int now, int sum, int target, int[] numbers){
-        if(sum == target) {
-            answer++;
-            //System.out.println("find: "+ now + " " + sum);
-            return;
-        } else if(sum < target) return;
-        
-        for(int i = now+1; i < numbers.length; i++){
-            //System.out.println(i + " " + (sum-(2*numbers[i])));
-            find(i, sum-2*numbers[i], target, numbers);
-        }
-        
-    }
+    int answer = 0;
     
     public int solution(int[] numbers, int target) {
         
-        // 오름차순 정렬
-        Arrays.sort(numbers);
-        int sum = 0; 
-        for(int n: numbers) sum += n;
+        // 백트래킹 가능(완탐)
+        backtraking(1, numbers[0], numbers.length, target, numbers);
+        backtraking(1, -numbers[0], numbers.length, target, numbers);
         
-        // 마이너스인 것을 조합으로 구해나가기
-        find(-1, sum, target, numbers);
-
+        // 숫자를 적절히 더하고 빼서 타겟 넘버를 만드는 방법의 수
         return answer;
+    }
+    
+    public void backtraking(int id, int res, int siz, int target, int[] numbers){
+        if(id == siz){
+            if(res == target) answer++;
+            return;
+        }
+        backtraking(id+1, res - numbers[id], siz, target, numbers); // 빼기 
+        backtraking(id+1, res + numbers[id], siz, target, numbers); // 더하기
     }
 }
