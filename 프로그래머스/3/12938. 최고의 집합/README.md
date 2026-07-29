@@ -1,10 +1,10 @@
 # [level 3] 최고의 집합 - 12938 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/12938) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/12938?language=java) 
 
 ### 성능 요약
 
-메모리: 5.62 MB, 시간: 2.12 ms
+메모리: 73.8 MB, 시간: 0.87 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2026년 03월 13일 17:01:41
+2026년 07월 29일 17:52:42
 
 ### 문제 설명
 
