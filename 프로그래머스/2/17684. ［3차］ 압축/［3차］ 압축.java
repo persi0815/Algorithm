@@ -1,41 +1,46 @@
 import java.util.*; 
 
 class Solution {
-    HashMap<String, Integer> index = new HashMap<>();
+    HashMap<String, Integer> dictionary = new HashMap<>(); 
     
-    // msg에서 idx가 i부터 인 단어중 사전에 있는 가장 긴 문자열 찾아 반환
-    public String findW(int i, String msg){
-        int len = 1;
-        while(i+len <= msg.length() && index.containsKey(msg.substring(i, i+len))) {
-            len++;
+    public String getLongestStr(String msg, int msgId){
+        String s = "";
+        for(int len = 1; len <= (msg.length()-msgId); len++){
+            if(dictionary.containsKey(msg.substring(msgId, msgId+len))) 
+                s = msg.substring(msgId, msgId+len);
+            else break;
         }
-        return msg.substring(i, i+len-1);
+        return s;
     }
-        
+    
     public int[] solution(String msg) {
-        List<Integer> answer = new ArrayList<>();
-        // map 만들기
-        for(int a = 0; a < 26; a++){
-            index.put(String.valueOf((char)(a+'A')), a+1);
+        List<Integer> ans = new ArrayList<>(); 
+        
+        // 길이가 1인 모든 단어를 포함하도록 사전을 초기화
+        for(int alph = 0; alph < 26; alph++){
+            dictionary.put(String.valueOf((char)('A'+alph)), alph+1); 
+        }
+        int num = 27;
+        
+        int msgId = 0;
+        
+        while(msgId < msg.length()){
+            // 사전에서 현재 입력과 일치하는 가장 긴 문자열 w 찾기
+            String w = getLongestStr(msg, msgId); 
+            // w에 해당하는 사전의 색인 번호를 출력
+            ans.add(dictionary.get(w));
+            // 입력에서 w를 제거
+            msgId += w.length(); 
+
+            // 입력에서 처리되지 않은 다음 글자가 남아있다면
+            if(msgId < msg.length()){ 
+                Character c = msg.charAt(msgId); 
+                // w+c에 해당하는 단어를 사전에 등록
+                dictionary.put(w+c, num++); 
+            }
         }
         
-        int nxt_id = 27;
-        
-        int i = 0; 
-        while(i < msg.length()){
-            // 가장 긴 w 찾기. 길이 늘리다가 index에 없으면 멈추기
-            String w = findW(i, msg); 
-            
-            // w의 색인을 answer에 넣기, i를 출력 다음 인덱스로 이동
-            answer.add(index.get(w)); 
-            i += w.length();
-            
-            // msg에서 아직 남은 글자가 있다면, w+c를 사전에 등록
-            if(i < msg.length()) index.put(w+msg.charAt(i), nxt_id++);
-        }
-        
-        
-        //  문자열을 압축한 후의 사전 색인 번호를 배열로 출력
-        return answer.stream().mapToInt(k->k).toArray();
+        // 주어진 문자열을 압축한 후의 사전 색인 번호를 배열로 출력
+        return ans.stream().mapToInt(i->i).toArray();
     }
 }
