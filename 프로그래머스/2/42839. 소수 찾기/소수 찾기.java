@@ -1,70 +1,55 @@
 import java.util.*; 
-/*
-한자리 숫자가 적힌 종이 조각이 흩어져있다. 
-흩어진 종이 조각을 붙여 소수를 몇 개 만들 수 있는지 알아내려 한다. 
 
-한 자리수로 나누기
-맨 앞에 0이면 안됨. 개수 정하고 순열로 만들기
-일단 만들고 소수인지 아닌지 판별
-
-*/
-
+// 흩어진 종이 조각을 붙여 소수를 몇 개 만들 수 있는지 
 class Solution {
-    // 순열을 이용해 해당 길이로 만들 수 있는 모든 숫자들 반환
-    Set<Integer> permutations = new HashSet<>(); // 중복 제거를 위해 Set 사용
-
-     public void permutation(String permu, List<String> nums, boolean[] visited, int len) {
-        if (permu.length() == len) {
-            permutations.add(Integer.parseInt(permu));
-            return;
-        }
-
-        for (int i = 0; i < nums.size(); i++) {
-            // 0으로 시작하는 수 제외
-            if (permu.equals("") && nums.get(i).equals("0")) continue;
-
-            if (!visited[i]) {
-                visited[i] = true;
-                permutation(permu + nums.get(i), nums, visited, len);
-                visited[i] = false;
-            }
-        }
-    }
-
-    // 소수 판별
-    public boolean isPrime(int n) {
-        if (n <= 1) return false;
-        if (n == 2) return true;
-
-        for (int i = 2; i <= Math.sqrt(n); i++) {
-            if (n % i == 0) return false;
-        }
-
-        return true;
+    
+    HashSet<Integer> set = new HashSet<>(); 
+    boolean[] visited;
+    int answer = 0;
+    
+    boolean[] notPrime = new boolean[10000000]; 
+    public boolean isPrime(int num){
+        if(notPrime[num]) return false; 
+        else return true; 
     }
     
-    // 각 종이에 적힌 숫자가 적힌 문자열
     public int solution(String numbers) {
-        List<String> nums = new ArrayList<>(); 
-        for(int i = 0; i < numbers.length(); i++){
-            nums.add(String.valueOf(numbers.charAt(i)));
-        }
-        // 오름차순 정렬
-        Collections.sort(nums);
+        char[] nums = numbers.toCharArray();
         
-        // 순열 만들기
-        
-        for(int len = 1; len <= numbers.length(); len++){
-            boolean[] visited = new boolean[numbers.length()];
-            permutation("", nums, visited, len);
+        Integer[] intNums = new Integer[nums.length]; 
+        for(int i = 0; i < nums.length; i++) {
+            char c = nums[i];
+            intNums[i] = Integer.parseInt(String.valueOf(c)); 
         }
         
-        // 소수 개수 세기
-        int answer = 0;
-        for (int num : permutations) {
-            if (isPrime(num)) answer++;
+        notPrime[0] = true; notPrime[1] = true; 
+        for(int i = 2; i < Math.sqrt(10000000); i++){
+            for(int j = i*i; j < 10000000; j+=i){
+                notPrime[j] = true; 
+            }
         }
+        
+        visited = new boolean[intNums.length]; 
+        
+        recursive(0, 0, intNums);
         
         return answer;
     }
+    
+    public void recursive(int len, int cur, Integer[] intNums){
+        if(len > 0 && !set.contains(cur)){
+            if(isPrime(cur)) answer++; 
+            set.add(cur); 
+        }
+        // 다음꺼
+        for(int i = 0; i < intNums.length; i++){
+            if(visited[i]) continue; 
+            
+            visited[i] = true; 
+            recursive(len+1, cur * 10 + intNums[i], intNums); 
+            visited[i] = false; 
+        }
+        
+    }
+    
 }
