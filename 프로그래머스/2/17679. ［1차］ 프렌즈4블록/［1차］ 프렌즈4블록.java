@@ -48,8 +48,6 @@ class Solution {
                     if(b[ny][nx] != '-'){
                         b[ny][nx] = '-'; // 갱신
                         deletedBlockNum++;
-                    }else{ // 이미 지워짐
-                        b[ny][nx] = '-'; // 갱신만
                     }
                 } 
             }
