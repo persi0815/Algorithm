@@ -1,12 +1,13 @@
 import java.util.*; 
 
-class Body{
-    String head; String number; String tail; 
-    public Body(String head, String number, String tail){
-        this.head = head; this.number = number; this.tail = tail; 
-    }
-}
 class Solution {
+    
+    class Body{
+        String head; String number; String tail; 
+        public Body(String head, String number, String tail){
+            this.head = head; this.number = number; this.tail = tail; 
+        }
+    }
     
     // 파일명에 포함된 숫자를 반영한 정렬 기능을 저장소 관리 프로그램에 구현
     public String[] solution(String[] files) {
