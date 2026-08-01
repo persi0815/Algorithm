@@ -1,56 +1,62 @@
-import java.util.*;
-/*
-프림 알고리즘으로 가중치가 낮은 것부터 선택해 나감
--> 모든 섬을 최소 비용으로 연결하는 MST 구하기!!
-*/
-class Node { //  implements Comparable<Node>
-    int to, cost;
+import java.util.*; 
 
-    Node(int to, int cost) {
-        this.to = to;
-        this.cost = cost;
-    }
-
-    // @Override
-    // public int compareTo(Node o) {
-    //     return Integer.compare(this.cost, o.cost);
-    // }
-}
-
+// 최소의 비용으로 모든 섬이 서로 통행 가능하도록
 class Solution {
-    public int prim(int n, List<Node>[] graph) {
+    
+    class Node{
+        int to; int cost; 
+        public Node(int to, int cost){
+            this.to = to; this.cost = cost; 
+        }
+    }
+    
+    List<Node>[] graph; 
+    
+    // 비용이 작은 것부터 선택
+    PriorityQueue<Node> pq = new PriorityQueue<>((a, b) -> {
+        return Integer.compare(a.cost, b.cost); 
+    });
+    
+    // 최소 간선 비용 반환
+    public int prim(int n){ // 현재 트리에서 이을 수 있는 간선 중 가장 비용이 작은 것. 
         boolean[] visited = new boolean[n];
-        PriorityQueue<Node> pq = new PriorityQueue<>((n1, n2) -> Integer.compare(n1.cost, n2.cost));
-        pq.offer(new Node(0, 0)); // 시작 노드
-        int totalCost = 0;
-
-        while (!pq.isEmpty()) {
-            Node current = pq.poll();
-
-            if (visited[current.to]) continue;
-
-            visited[current.to] = true;
-            totalCost += current.cost;
-
-            for (Node next : graph[current.to]) {
-                if (!visited[next.to]) {
-                    pq.offer(next);
-                }
+        pq.offer(new Node(0, 0)); 
+        int totalCost = 0; 
+        
+        while(!pq.isEmpty()){
+            Node cur = pq.poll(); 
+            
+            if(visited[cur.to]) continue; // 방문 안했어야 -> 사이클 안생김
+            visited[cur.to] = true; 
+            totalCost += cur.cost; // 가장 작은 간선으로 이동!
+            
+            for(Node nxt : graph[cur.to]){ // 연결된 간선들 모두
+                if(visited[nxt.to]) continue; // 아직 연결되지 않은 것들 중에
+                pq.offer(nxt);
             }
         }
-
+        
         return totalCost;
     }
-
+    
     public int solution(int n, int[][] costs) {
-        List<Node>[] graph = new ArrayList[n];
-        for (int i = 0; i < n; i++) graph[i] = new ArrayList<>();
-
-        for (int[] edge : costs) {
-            graph[edge[0]].add(new Node(edge[1], edge[2]));
-            graph[edge[1]].add(new Node(edge[0], edge[2]));
+        // 연결리스트 만들기
+        graph = new ArrayList[n];
+        for(int i = 0; i < n; i++) graph[i] = new ArrayList<>(); 
+        for(int[] c : costs){
+            graph[c[0]].add(new Node(c[1], c[2]));
+            graph[c[1]].add(new Node(c[0], c[2]));
         }
-
-        return prim(n, graph);
+        
+        // pq에서 하나씩 고르기 -> 사이클 없는지 확인
+        while(!pq.isEmpty()){
+            Node node = pq.poll(); 
+            
+        }
+        
+        return prim(n);
     }
+    
+    
+    
 }
